@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detector de Distração</title>
+    <meta charset="UTF-8" />
+    <style>
+        body { font-family: Arial; background: #111; color: #eee; text-align: center; }
+        .card { margin: 40px auto; padding: 20px; width: 350px; border-radius: 10px; background: #222; }
+        .status { font-size: 2rem; margin-top: 20px; }
+    </style>
+</head>
+
+<body>
+    <h1>Detector de Distração - ESP32-CAM</h1>
+        
+    <img src="/stream" style="width:70%;border:2px solid #444;border-radius:8px;">
+
+    <div class="card">
+        <h2>Status Atual</h2>
+        <div id="person" class="status">Pessoa: ...</div>
+        <div id="cell" class="status">Celular: ...</div>
+    </div>
+
+    <script>
+        async function update() {
+            const res = await fetch("/status");
+            const data = await res.json();
+
+            document.getElementById("person").innerText =
+                "Pessoa: " + (data.person ? "Detectada" : "Não");
+
+            document.getElementById("cell").innerText =
+                "Celular: " + (data.cellphone ? "Detectado" : "Não");
+        }
+
+        setInterval(update, 500);
+        update();
+    </script>
+</body>
+</html>
