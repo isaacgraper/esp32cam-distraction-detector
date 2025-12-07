@@ -7,7 +7,7 @@ const char* ssid = "Cristiano_2.4GHz";
 const char* password = "01041980";
 const char* serverURL = "http://192.168.1.35:8000/frame";
 
-// ======= PINAGEM AI-THINKER (sem dependência externa) =======
+// ======= PINAGEM AI-THINKER =======
 #define PWDN_GPIO_NUM     32
 #define RESET_GPIO_NUM    -1
 #define XCLK_GPIO_NUM     0

@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Detector de Distração</title>
     <meta charset="UTF-8" />
-    <style>
-        body { font-family: Arial; background: #111; color: #eee; text-align: center; }
-        .card { margin: 40px auto; padding: 20px; width: 350px; border-radius: 10px; background: #222; }
-        .status { font-size: 2rem; margin-top: 20px; }
-    </style>
+    <title>Distraction Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <h1>Detector de Distração - ESP32-CAM</h1>
-        
-    <img src="/stream" style="width:70%;border:2px solid #444;border-radius:8px;">
+<body class="bg-gray-900 text-white">
 
-    <div class="card">
-        <h2>Status Atual</h2>
-        <div id="person" class="status">Pessoa: ...</div>
-        <div id="cell" class="status">Celular: ...</div>
+    <div class="max-w-4xl mx-auto p-6">
+
+        <h1 class="text-3xl font-bold mb-4">📡 Distraction Detector</h1>
+
+        <div class="border-4 border-gray-700 rounded-lg overflow-hidden shadow-lg">
+            <img id="stream" src="/stream" class="w-full" />
+        </div>
+
+        <div class="grid grid-cols-3 gap-6 mt-6">
+
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold mb-2">Person</h2>
+                <p id="person" class="text-3xl font-bold text-blue-300">...</p>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold mb-2">Cellphone</h2>
+                <p id="cellphone" class="text-3xl font-bold text-yellow-300">...</p>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-xl shadow-lg">
+                <h2 class="text-xl font-bold mb-2">Distraction Count</h2>
+                <p id="count" class="text-3xl font-bold text-red-400">0</p>
+            </div>
+
+        </div>
+
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg mt-6">
+            <h2 class="text-xl font-bold mb-2">Status</h2>
+            <p id="status" class="text-2xl font-semibold text-green-400">Loading...</p>
+        </div>
+
     </div>
 
     <script>
@@ -26,15 +47,23 @@
             const res = await fetch("/status");
             const data = await res.json();
 
-            document.getElementById("person").innerText =
-                "Pessoa: " + (data.person ? "Detectada" : "Não");
+            document.getElementById("person").innerText = data.person ? "YES" : "NO";
+            document.getElementById("cellphone").innerText = data.cellphone ? "YES" : "NO";
+            document.getElementById("count").innerText = data.count;
 
-            document.getElementById("cell").innerText =
-                "Celular: " + (data.cellphone ? "Detectado" : "Não");
+            document.getElementById("status").innerText =
+                data.distraction ? "⚠️ DISTRACTION" : "✔️ NORMAL";
+
+            document.getElementById("status").className =
+                data.distraction
+                ? "text-2xl font-semibold text-red-400"
+                : "text-2xl font-semibold text-green-400";
+
+            setTimeout(update, 300);
         }
 
-        setInterval(update, 500);
         update();
     </script>
+
 </body>
 </html>
